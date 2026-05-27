@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tts-engine xmlns:android="http://schemas.android.com/apk/res/android"
+    android:settingsActivity="com.example.picottsengine.SettingsActivity">
+    
+    <language lang="en" country="US" variant="" />
+    <language lang="en" country="GB" variant="" />
+    <language lang="de" country="DE" variant="" />
+    <language lang="es" country="ES" variant="" />
+    <language lang="fr" country="FR" variant="" />
+    <language lang="it" country="IT" variant="" />
+    
+</tts-engine>

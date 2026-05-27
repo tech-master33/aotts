@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pico TTS Engine</string>
+    <string name="tts_engine_settings">Pico TTS Settings</string>
+    <string name="speak_button">Speak</string>
+    <string name="stop_button">Stop</string>
+    <string name="clear_button">Clear Text</string>
+    <string name="input_hint">Enter text here</string>
+</resources>
