@@ -8,7 +8,7 @@ A complete Android Text-to-Speech engine implementation using SVOX Pico TTS libr
 
 **Latest APK → [github.com/tech-master33/baosp/releases/tag/nightly](https://github.com/tech-master33/baosp/releases/tag/nightly)**
 
-A fresh build is posted there automatically every night alongside the screen reader.
+A fresh build is posted there automatically every night alongside the screen reader and launcher.
 You can also find standalone builds on the [releases page](https://github.com/tech-master33/aotts/releases) of this repo.
 
 ## Features
@@ -19,6 +19,7 @@ You can also find standalone builds on the [releases page](https://github.com/te
 ✅ **JNI Integration** — Native C bindings for optimal performance
 ✅ **TalkBack Compatible** — Full accessibility support
 ✅ **System-Level TTS** — Registers as default TTS engine
+✅ **Works with andrdscren** — Paired with the BAOSP screen reader for full accessible stack
 
 ## Installing on your device
 
@@ -27,6 +28,8 @@ You can also find standalone builds on the [releases page](https://github.com/te
 3. Install it — allow "unknown sources" if prompted
 4. Go to **Settings → Language & input → Text-to-speech output**
 5. Select **AOTTS Pico** as your engine
+
+For the best experience, also install [andrdscren](https://github.com/tech-master33/andrdscren) (the BAOSP screen reader) and [aoler](https://github.com/tech-master33/aoler) (the BAOSP launcher) from the same nightly bundle.
 
 ## Building locally
 
@@ -66,6 +69,20 @@ chmod +x gradlew
 
 Every push to `main` automatically builds a new APK and posts it as a GitHub Release.
 The badge above shows whether the latest build passed or failed.
+
+## BAOSP Ecosystem
+
+aotts is one of four repos that make up BAOSP — an accessible Android platform for blind and visually impaired users:
+
+| Repo | What it does |
+|------|-------------|
+| [baosp](https://github.com/tech-master33/baosp) | Main project — nightly bundle, AOSP patches, release coordination |
+| [andrdscren](https://github.com/tech-master33/andrdscren) | Screen reader — accessibility service |
+| **[aotts](https://github.com/tech-master33/aotts)** | **SVOX Pico TTS engine (this repo)** |
+| [aoler](https://github.com/tech-master33/aoler) | Accessible home screen launcher |
+
+All four APKs are bundled together and published every night at  
+**[github.com/tech-master33/baosp/releases/tag/nightly](https://github.com/tech-master33/baosp/releases/tag/nightly)**
 
 ## License
 
