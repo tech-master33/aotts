@@ -1,0 +1,114 @@
+name: Bug report
+description: Something in the SVOX Pico TTS engine is not working correctly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting this.
+        Please fill in each field below. Voice and speech problems are especially helped by specific examples of text that sounds wrong.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: Describe exactly what went wrong with the speech or the engine.
+      placeholder: "Example: When the engine tries to speak a sentence longer than about 50 words, it cuts off at the end and goes silent."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected to hear
+      description: Describe what the speech should have sounded like or what the engine should have done.
+      placeholder: "Example: The full sentence should be read aloud from start to finish."
+    validations:
+      required: true
+
+  - type: textarea
+    id: sample-text
+    attributes:
+      label: Sample text that triggers the problem
+      description: If the bug involves how specific words or sentences sound, paste the exact text here. This is very helpful for voice quality bugs.
+      placeholder: |
+        Example: "The quick brown fox jumps over the lazy dog. This is a second sentence that never gets read."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Which language or voice has the problem
+      options:
+        - English (United States)
+        - English (United Kingdom)
+        - German
+        - Spanish
+        - French
+        - Italian
+        - All languages
+        - Not a speech quality issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: List the exact steps that cause the problem. Number each step.
+      placeholder: |
+        1. Open Settings
+        2. Open Language and input
+        3. Open Text-to-speech output
+        4. Select AOTTS Pico as the engine
+        5. Activate the Play button to hear a test sentence
+        6. Nothing is spoken
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How often does this happen
+      options:
+        - Every time I follow the steps above
+        - Most of the time
+        - Only sometimes — hard to reproduce
+        - Only happened once
+    validations:
+      required: true
+
+  - type: input
+    id: android-version
+    attributes:
+      label: Android version
+      description: "Find this in Settings → About phone → Android version"
+      placeholder: "Example: Android 8.1"
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device model
+      placeholder: "Example: Samsung Galaxy A13"
+    validations:
+      required: true
+
+  - type: input
+    id: apk-version
+    attributes:
+      label: aotts version
+      description: The short commit SHA shown in the APK filename from the nightly release (example — abc1234)
+      placeholder: "abc1234"
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Any other information that might help.
+    validations:
+      required: false
