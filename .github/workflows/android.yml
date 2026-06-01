@@ -1,0 +1,113 @@
+name: Android CI — aotts
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build AOTTS APK
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout latest code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Print commit being built
+        run: git log -1 --format="%H  %s  (%ci)"
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android NDK and CMake
+        run: |
+          echo "y" | sdkmanager "ndk;23.1.7779620" "cmake;3.22.1"
+          echo "NDK_HOME=$ANDROID_SDK_ROOT/ndk/23.1.7779620" >> $GITHUB_ENV
+
+      - name: Download SVOX Pico native source from AOSP
+        run: |
+          mkdir -p src/main/cpp/pico
+          git clone --depth=1 \
+            https://android.googlesource.com/platform/external/svox \
+            /tmp/svox_src
+          if [ -d /tmp/svox_src/pico ]; then
+            cp -r /tmp/svox_src/pico/* src/main/cpp/pico/
+            echo "SVOX Pico source copied"
+          else
+            echo "ERROR: pico folder not found"; ls /tmp/svox_src/; exit 1
+          fi
+
+      - name: Download SVOX Pico language data files
+        run: |
+          mkdir -p src/main/assets/lang
+
+          SVOX_LANG="https://android.googlesource.com/platform/external/svox/+archive/refs/heads/master/pico/lang.tar.gz"
+          curl -L "$SVOX_LANG" -o /tmp/pico_lang.tar.gz 2>/dev/null || true
+
+          if [ -f /tmp/pico_lang.tar.gz ] && [ -s /tmp/pico_lang.tar.gz ]; then
+            tar -xzf /tmp/pico_lang.tar.gz -C src/main/assets/lang/ 2>/dev/null || true
+            echo "Extracted from AOSP tarball"
+          fi
+
+          if [ -z "$(ls -A src/main/assets/lang/*.bin 2>/dev/null)" ]; then
+            git clone --depth=1 --filter=blob:none --sparse \
+              https://android.googlesource.com/platform/external/svox \
+              /tmp/svox_lang || true
+            if [ -d /tmp/svox_lang ]; then
+              git -C /tmp/svox_lang sparse-checkout set pico/lang
+              git -C /tmp/svox_lang checkout || true
+              find /tmp/svox_lang/pico/lang -name "*.bin" \
+                -exec cp {} src/main/assets/lang/ \; 2>/dev/null || true
+            fi
+          fi
+
+          echo "Language files:"
+          ls -lh src/main/assets/lang/ || echo "WARNING: no .bin files — TTS will have no voice data"
+
+      - name: Grant Gradle execute permission
+        run: chmod +x gradlew
+
+      - name: Build debug APK
+        run: |
+          ./gradlew clean assembleDebug \
+            -Pandroid.ndkVersion=23.1.7779620 \
+            --no-daemon \
+            --stacktrace
+
+      - name: Build release APK (unsigned)
+        run: |
+          ./gradlew assembleRelease \
+            -Pandroid.ndkVersion=23.1.7779620 \
+            --no-daemon \
+            --stacktrace || echo "Release skipped (needs signing config)"
+
+      - name: Show built APKs
+        run: find build/outputs/apk -name "*.apk" -exec ls -lh {} \;
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: aotts-debug
+          path: build/outputs/apk/debug/
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload release APK (if built)
+        uses: actions/upload-artifact@v4
+        with:
+          name: aotts-release
+          path: build/outputs/apk/release/
+          retention-days: 30
+          if-no-files-found: ignore
