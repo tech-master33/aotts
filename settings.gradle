@@ -12,5 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "PicoTTS"
-include ':app'
+
+// Source lives in src/main/ at the repo root — there is no separate :app submodule.
+rootProject.name = "aotts"

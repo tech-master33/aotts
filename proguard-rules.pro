@@ -1,29 +1,25 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# signingConfigs signing config and/or buildTypes.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# aotts — ProGuard / R8 rules
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# ── TTS service and JNI bridge must survive shrinking ─────────────────────
+# The Android TTS framework binds the service by class name.
+# JNI methods must keep their exact signatures or native calls will crash.
+-keep class org.baosp.aotts.** { *; }
+-keep class com.example.picottsengine.** { *; }
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
--keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
-
-# PicoTTS specific rules
--keep class com.example.picottsengine.PicoNative { *; }
--keep class com.example.picottsengine.PicoEngine { *; }
--keep class com.example.picottsengine.PicoTtsService { *; }
+# ── Keep all native (JNI) method signatures intact ────────────────────────
 -keepclasseswithmembernames class * {
     native <methods>;
 }
+
+# ── TTS service registration ───────────────────────────────────────────────
+-keep public class * extends android.speech.tts.TextToSpeech$Engine
+-keep public class * extends android.app.Service
+
+# ── Kotlin metadata ────────────────────────────────────────────────────────
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keepattributes Signature
+-keepattributes Exceptions
+
+# ── Suppress known-safe warnings ──────────────────────────────────────────
+-dontwarn kotlin.**
