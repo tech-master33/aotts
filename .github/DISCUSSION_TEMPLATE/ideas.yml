@@ -1,0 +1,55 @@
+title: "[Idea] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share an idea for aotts — a new feature, a voice improvement, a new language, or a behaviour you wish worked differently.
+        You do not need to know how to code. Just describe what you want.
+        If this is a firm request you want tracked, consider opening a Feature request issue instead.
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: What is your idea
+      description: Start with "I want to be able to..." or "It would help if..."
+      placeholder: "Example: It would help if aotts had a Portuguese (Brazil) voice. I use Portuguese as my primary language and currently have to use a different TTS engine just for that."
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why would this help
+      description: Describe the problem it solves or the task it makes easier.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of aotts does this relate to
+      options:
+        - Speech quality — how words sound
+        - A new language or voice
+        - Speech rate or pitch control
+        - Integration with andrdscren or TalkBack
+        - Settings and configuration
+        - Not sure
+    validations:
+      required: false
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Which language does this relate to (if any)
+      options:
+        - Not language-specific
+        - English (United States)
+        - English (United Kingdom)
+        - German
+        - Spanish
+        - French
+        - Italian
+        - A language not currently supported
+    validations:
+      required: false

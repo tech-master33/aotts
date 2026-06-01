@@ -1,0 +1,30 @@
+title: ""
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the place for general conversation about aotts — the BAOSP SVOX Pico TTS engine.
+        No question is too small. No topic is off limits as long as it relates to aotts or speech synthesis on Android.
+
+  - type: textarea
+    id: message
+    attributes:
+      label: What would you like to discuss
+      description: Write as much or as little as you like. Plain language is always fine.
+      placeholder: "Example: I have been using aotts for a few weeks and wanted to share my thoughts on how the Pico voices compare to Google TTS."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: What is this about
+      options:
+        - My experience using aotts
+        - A question about how something works
+        - Voice quality or language support
+        - Comparing aotts to other TTS engines
+        - The BAOSP project in general
+        - Something else
+    validations:
+      required: false

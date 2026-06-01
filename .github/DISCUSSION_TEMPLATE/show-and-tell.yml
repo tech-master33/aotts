@@ -1,0 +1,55 @@
+title: "[Show] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share how you use aotts or a tip you discovered about speech output on Android.
+        This could be a voice setting combination, a language trick, or a workflow that works well for you.
+        It does not have to be technical. If it helps, it is worth sharing.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What are you sharing
+      description: Describe your setup or discovery in plain language.
+      placeholder: "Example: I found that setting aotts speech rate to 1.3x and pitch to 0.9 gives the most comfortable listening experience for long reading sessions. It sounds less robotic than the default settings."
+    validations:
+      required: true
+
+  - type: textarea
+    id: how
+    attributes:
+      label: How did you set it up
+      description: Step-by-step if possible, so others can replicate it.
+      placeholder: |
+        1. Open Settings
+        2. Open Language and input
+        3. Open Text-to-speech output
+        4. Make sure AOTTS Pico is selected as the engine
+        5. Tap the settings gear next to the engine name
+        6. Set Speech rate to 1.3 and Pitch to 0.9
+    validations:
+      required: false
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Which language voice were you using
+      options:
+        - English (United States)
+        - English (United Kingdom)
+        - German
+        - Spanish
+        - French
+        - Italian
+        - All languages
+    validations:
+      required: false
+
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android version
+      placeholder: "Example: Samsung Galaxy A13, Android 12"
+    validations:
+      required: false

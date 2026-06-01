@@ -1,0 +1,48 @@
+title: "[Question] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ask anything about aotts or using text-to-speech on Android.
+        There are no wrong questions.
+        If you found a bug (something that is broken, not just unclear), open a Bug report issue instead.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: What is your question
+      description: Describe what you are trying to do and where you are stuck.
+      placeholder: "Example: I installed aotts and selected it in TTS settings but my screen reader is still using the Google voice. How do I make my screen reader use aotts instead?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What have you already tried
+      placeholder: "Example: I set aotts as the preferred engine in Settings → Language and input → Text-to-speech output. The test sentence speaks in the Pico voice but the screen reader still uses Google TTS."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Which language are you using
+      options:
+        - English (United States)
+        - English (United Kingdom)
+        - German
+        - Spanish
+        - French
+        - Italian
+        - Other
+    validations:
+      required: false
+
+  - type: input
+    id: device
+    attributes:
+      label: Android version and device
+      placeholder: "Example: Android 10, OnePlus 6"
+    validations:
+      required: false
