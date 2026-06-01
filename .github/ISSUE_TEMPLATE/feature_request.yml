@@ -1,0 +1,70 @@
+name: Feature request
+description: Suggest something new or improved for the TTS engine
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an improvement.
+        You do not need to know how to code. Just describe what you need.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What task are you trying to accomplish
+      description: Start with "I want to be able to..."
+      placeholder: "Example: I want to be able to switch between English and Spanish voice without going into system settings."
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: How you currently work around this
+      placeholder: "Example: I switch manually in Settings every time, which takes about 10 steps."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed
+    attributes:
+      label: What you would like to see
+      description: Describe the feature in plain language.
+      placeholder: "Example: A quick-switch shortcut that cycles between installed language voices."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: related-language
+    attributes:
+      label: Is this related to a specific language
+      options:
+        - No — applies to all languages
+        - English (United States)
+        - English (United Kingdom)
+        - German
+        - Spanish
+        - French
+        - Italian
+        - A language not currently supported
+    validations:
+      required: true
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: How much does this affect your daily use
+      options:
+        - Blocks me completely — I cannot do what I need to do
+        - Major inconvenience — I lose significant time working around it
+        - Minor inconvenience — annoying but manageable
+        - Nice to have — would improve the experience but not urgent
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+    validations:
+      required: false
