@@ -7,6 +7,9 @@ on:
     branches: [ "main", "master" ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build AOTTS APK
@@ -46,7 +49,9 @@ jobs:
             cp -r /tmp/svox_src/pico/* src/main/cpp/pico/
             echo "SVOX Pico source copied"
           else
-            echo "ERROR: pico folder not found"; ls /tmp/svox_src/; exit 1
+            echo "ERROR: pico folder not found in SVOX repo"
+            ls /tmp/svox_src/
+            exit 1
           fi
 
       - name: Download SVOX Pico language data files
@@ -96,7 +101,7 @@ jobs:
       - name: Show built APKs
         run: find build/outputs/apk -name "*.apk" -exec ls -lh {} \;
 
-      - name: Upload debug APK
+      - name: Upload debug APK as artifact
         uses: actions/upload-artifact@v4
         with:
           name: aotts-debug
@@ -104,10 +109,39 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
-      - name: Upload release APK (if built)
+      - name: Upload release APK as artifact (if built)
         uses: actions/upload-artifact@v4
         with:
           name: aotts-release
           path: build/outputs/apk/release/
           retention-days: 30
           if-no-files-found: ignore
+
+      # ── Auto-release on every successful push to main ──────────────────
+      # Creates a GitHub Release tagged with the build number + commit SHA.
+      # The APK is attached directly — always one link to the latest build.
+      - name: Create GitHub Release with APK
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "build-${{ github.run_number }}-${{ github.sha }}"
+          name: "aotts build ${{ github.run_number }} — ${{ github.sha }}"
+          body: |
+            Automated build from commit ${{ github.sha }}
+
+            **Commit message:** ${{ github.event.head_commit.message }}
+
+            Includes SVOX Pico language data for:
+            English (US/GB), German, Spanish, French, Italian
+
+            ## How to install
+            1. Download the APK below
+            2. Transfer it to your Android device
+            3. Install it (allow unknown sources if prompted)
+            4. Go to **Settings → Language & input → Text-to-speech output**
+            5. Select **AOTTS Pico** as your engine
+          prerelease: true
+          files: |
+            build/outputs/apk/debug/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
