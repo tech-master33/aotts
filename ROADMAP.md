@@ -1,4 +1,4 @@
-# aotts Roadmap
+# baosp-tts Roadmap
 
 This document describes what we plan to build next, why each item matters,
 and what state each one is in. It is updated as things change.
@@ -7,7 +7,7 @@ If you want to work on something listed here, open an issue or discussion first
 so we can coordinate and avoid duplicated effort.
 
 If something important to you is missing, open a feature request at
-github.com/tech-master33/aotts/issues — the issue templates will ask you
+github.com/tech-master33/baosp-tts/issues — the issue templates will ask you
 the right questions.
 
 ---
@@ -33,7 +33,7 @@ Items are roughly ordered by priority within each section.
 (English US/GB, German, Spanish, French, Italian).
 
 **Why it matters:** SVOX Pico has voices for additional languages in some AOSP
-distributions. Adding them makes aotts usable for more people without requiring a
+distributions. Adding them makes baosp-tts usable for more people without requiring a
 second TTS engine.
 
 **How to contribute:** Check whether the SVOX AOSP source includes the `.bin`
@@ -65,7 +65,7 @@ quickly, but slower speech in a banking app where missing a digit matters.
 Right now rate and pitch are single global settings that apply everywhere.
 
 **Proposed approach:** Store a map of package name → (rate, pitch) in SharedPreferences.
-When the foreground app changes, update the TTS parameters. Add a UI in the aotts
+When the foreground app changes, update the TTS parameters. Add a UI in the baosp-tts
 settings screen to manage per-app overrides.
 
 ---
@@ -79,15 +79,15 @@ voice, automatically switch to the matching Pico voice for that language.
 French, the English voice reads the French words with English pronunciation — which is
 often incomprehensible. Auto-switching makes multilingual content understandable.
 
-**Dependencies:** Requires the andrdscren screen reader (or another client) to pass
-a language hint with the TTS request, or requires language detection in the aotts service
+**Dependencies:** Requires baosp-screenreader (or another client) to pass
+a language hint with the TTS request, or requires language detection in the baosp-tts service
 layer itself using Android's `TextClassifier`.
 
 ---
 
 ### Voice preview in settings — Needs help
 
-**What it is:** A button in the aotts settings screen that speaks a sample sentence in
+**What it is:** A button in the baosp-tts settings screen that speaks a sample sentence in
 each available language, so the user can compare voices before choosing one.
 
 **Why it matters:** Right now the only way to hear what a voice sounds like is to
@@ -113,7 +113,7 @@ spellings, applied before text is sent to the engine.
 
 **Why it matters:** SVOX Pico was built in the mid-2000s. It mispronounces many modern
 words — app names, websites, abbreviations, and brand names. A pronunciation dictionary
-in the Kotlin layer can fix these without modifying any C code.
+in the Java layer can fix these without modifying any C code.
 
 **How to contribute:** Open an issue with a word that sounds wrong and what it should
 sound like phonetically. You do not need to know how to code to contribute to this —
@@ -129,7 +129,7 @@ part.
 
 ### Sentence boundary detection — Planned
 
-**What it is:** Improve how aotts splits long text into sentences before sending to
+**What it is:** Improve how baosp-tts splits long text into sentences before sending to
 the Pico C engine.
 
 **Why it matters:** SVOX Pico clips audio if a single text chunk is too long.
@@ -149,11 +149,11 @@ sequences correctly.
 text, allowing callers to control emphasis, pauses, and pronunciation inline.
 
 **Why it matters:** Some Android apps send SSML-formatted text to TTS engines to add
-natural-sounding pauses and stress. Currently aotts strips all markup and reads the raw
+natural-sounding pauses and stress. Currently baosp-tts strips all markup and reads the raw
 text, losing the formatting the app intended.
 
 **Proposed approach:** Parse `<break>`, `<emphasis>`, `<say-as>`, and `<phoneme>` tags
-in the Kotlin layer before passing text to Pico. Map each tag to a Pico-level equivalent
+in the Java layer before passing text to Pico. Map each tag to a Pico-level equivalent
 where possible.
 
 ---
@@ -166,7 +166,7 @@ where possible.
 phone call) takes audio focus while the TTS engine is speaking.
 
 **Why it matters:** If a phone call arrives while the screen reader is speaking,
-aotts and the phone call audio currently conflict. The TTS engine should pause,
+baosp-tts and the phone call audio currently conflict. The TTS engine should pause,
 let the call audio play, and resume after the call ends.
 
 **Proposed approach:** Register an `AudioFocusRequest` in `PicoTtsService`.
