@@ -6,6 +6,36 @@ Every step is numbered and linear — no visual layout is assumed.
 
 ---
 
+## Ways to contribute
+
+You do not need to write code to contribute. Here are all the ways you can help:
+
+1. Report a bug — describe something that does not sound right or causes a crash
+2. Request a feature — describe a voice, language, or setting you need
+3. Add mispronounced words — report words Pico says wrong so they can be fixed
+4. Improve documentation — fix unclear steps or add missing information
+5. Test builds — install nightly APKs and report voice quality issues
+6. Translate — help add new language voices or translate in-app strings
+7. Write code — fix bugs or add features to the TTS service
+
+---
+
+## Claiming an issue
+
+If you want to work on an existing issue — especially one tagged `needs help` or `good first issue` — follow these steps first.
+
+1. Open the issue you want to work on
+2. Read the full description, including the "Where to start" section if there is one
+3. Leave a comment saying you would like to work on it — for example: "I'd like to take this on"
+4. Wait for a maintainer to reply — we will assign the issue to you and answer any questions
+5. Once assigned, follow the steps in this guide to fork, branch, make your change, and open a pull request
+
+This step matters because it avoids two people doing the same work at the same time.
+If you have been assigned an issue and decide you cannot continue, leave a comment to let us know.
+We will unassign it so someone else can pick it up.
+
+---
+
 ## Before you start
 
 You need:
@@ -64,18 +94,22 @@ cd aotts
 git remote add upstream https://github.com/tech-master33/aotts.git
 ```
 
+Running `git remote -v` should now show both `origin` (your fork) and `upstream` (the main repo).
+
 ---
 
 ## Step 3 — Create a branch for your change
+
+Never commit directly to `main`. Create a new branch first.
 
 ```bash
 git checkout -b your-branch-name
 ```
 
-Name examples:
+Name the branch something descriptive. Examples:
 
 - `fix/crash-on-italian-voice`
-- `feature/add-german-dialect`
+- `feature/add-portuguese-voice`
 - `docs/local-build-steps`
 
 ---
@@ -101,8 +135,8 @@ curl -L \
 ls src/main/assets/lang/
 ```
 
-You should see files ending in `.bin` — one file per language.
-If the tar download fails, try the sparse clone fallback:
+You should see `.bin` files — one per language.
+If the tar download fails, use the sparse clone fallback:
 
 ```bash
 git clone --depth=1 --filter=blob:none --sparse \
@@ -119,62 +153,77 @@ find /tmp/svox_lang/pico/lang -name "*.bin" -exec cp {} src/main/assets/lang/ \;
 Key source files:
 
 - `src/main/java/` — TTS engine service, language detection, voice selection
-- `src/main/cpp/` — C wrapper around SVOX Pico (after you download it in Step 4)
-- `CMakeLists.txt` — build rules for the C code
-- `build.gradle` — Android project configuration
+- `src/main/cpp/pico/` — SVOX Pico C source (downloaded in Step 4, do not commit)
+- `src/main/assets/lang/` — voice data `.bin` files (downloaded in Step 4, do not commit)
+- `CMakeLists.txt` — native build configuration
 
-### Language support
+### Accessibility rules for this project
 
-Supported languages are defined in the Java/Kotlin service class.
-Each language needs a matching `.bin` file in `src/main/assets/lang/`.
-Do not add a language unless its `.bin` file is available from the SVOX AOSP source.
+Every change must follow these rules:
+
+1. All UI elements in settings screens must have a content description
+2. Touch targets must be at least 48dp wide and 48dp tall
+3. All strings shown to the user must be in `strings.xml` so they can be translated
+4. Test every settings screen change with a screen reader turned on before submitting
 
 ---
 
-## Step 6 — Build locally
+## Step 6 — Build and test locally
 
 ```bash
 chmod +x gradlew
-./gradlew assembleDebug -Pandroid.ndkVersion=23.1.7779620
+./gradlew assembleDebug
 ```
 
 The APK will be at:
 
 ```
-build/outputs/apk/debug/
+build/outputs/apk/debug/aotts-debug.apk
 ```
 
-Note: the APK lives in the root `build/` folder, not inside `app/build/`.
-This is because the project does not use an `app/` module.
-
-To install on a connected device:
+To install it on a connected Android device:
 
 ```bash
-adb install build/outputs/apk/debug/*.apk
+adb install build/outputs/apk/debug/aotts-debug.apk
 ```
+
+After installing, go to Settings → Accessibility → Text-to-speech output and select aotts as the engine.
 
 ### Manual testing checklist
 
 Go through each item before submitting your pull request:
 
-- The APK builds without errors
-- The TTS engine appears in Settings under Language and input, Text-to-speech output
-- Selecting the engine does not crash the Settings app
-- The engine speaks a test sentence clearly when you activate Play
-- All six languages produce speech (English US, English GB, German, Spanish, French, Italian)
-- The screen reader can read the engine name and language options aloud
+- The app builds without errors or warnings (including the NDK build)
+- aotts appears in the TTS engine list in Android Settings
+- All six languages (English US, English GB, German, Spanish, French, Italian) produce speech
+- Speech rate and pitch controls in Settings take effect immediately
+- The engine does not crash or produce silence on long strings
+- The engine does not crash when the system language does not match any available voice
 
 ---
 
 ## Step 7 — Commit your changes
 
+Write a commit message that clearly explains what changed and why.
+
 ```bash
 git add .
-git commit -m "fix: Spanish voice mispronounces words ending in -cion
+git commit -m "fix: Italian voice fails silently when lang file path is wrong
 
-The phoneme mapping for -cion endings was missing a rule.
-Added the rule in the Kotlin layer before passing text to Pico."
+The asset path for the Italian .bin file had a typo introduced in
+the last refactor. Fixed the path and added a check that logs an
+error if the file is missing at startup."
 ```
+
+Commit message format:
+
+```
+type: short summary in plain English
+
+Longer explanation if needed. Explain the problem, not just the fix.
+```
+
+Types: `fix`, `feature`, `docs`, `refactor`, `build`
 
 ---
 
@@ -187,25 +236,52 @@ git push origin your-branch-name
 Then:
 
 1. Open github.com/YOUR-USERNAME/aotts
-2. Activate Compare and pull request
-3. Title: one sentence describing the change
-4. Description: what problem does this solve, how did you test it
-5. Activate Create pull request
+2. GitHub shows a bar saying your branch was recently pushed
+3. Activate Compare and pull request
+4. Fill in the title: one sentence describing the change
+5. Fill in the description: what problem does this solve, how did you test it
+6. Activate Create pull request
 
 ---
 
-## Reporting a bug
+## Reporting a bug or requesting a feature
+
+You do not need to know how to code to do this. It is one of the most valuable contributions.
 
 1. Open github.com/tech-master33/aotts/issues
 2. Activate New issue
-3. Include:
-   - Which language or voice has the problem
-   - What text triggered the problem
-   - What you heard versus what you expected to hear
+3. Choose Bug report or Feature request
+4. Fill in the title with one short sentence describing the problem or request
+5. In the body, include:
+   - What language and voice you were using
+   - What you were trying to do
+   - What happened instead of what you expected
    - Your Android version and device model
+   - Whether the problem happens with all languages or only one
 
 ---
 
-## Getting help
+## Code review process
 
-Open a discussion at github.com/tech-master33/aotts/discussions
+After you open a pull request:
+
+1. A maintainer will read your changes and may ask questions in the comments
+2. Reply to comments — activate the Resolve conversation button once you have addressed the point
+3. If changes are requested, push new commits to the same branch — the pull request updates automatically
+4. Once approved, a maintainer will merge your pull request
+
+Most pull requests receive a first response within a few days.
+If you have not heard back after a week, add a comment to the pull request to ask for an update.
+
+---
+
+## Community and questions
+
+- Discussions: github.com/tech-master33/aotts/discussions
+- Issues: github.com/tech-master33/aotts/issues
+- Screen reader: github.com/tech-master33/andrdscren
+- Launcher: github.com/tech-master33/aoler
+- BAOSP main project: github.com/tech-master33/baosp
+
+Open a discussion if you have a question. Describe what you are trying to do and where you are stuck.
+You do not need to have a solution — questions about how things work are welcome.
