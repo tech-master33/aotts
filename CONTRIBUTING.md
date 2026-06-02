@@ -1,6 +1,6 @@
-# Contributing to aotts
+# Contributing to baosp-tts
 
-Thank you for contributing to aotts, the SVOX Pico TTS engine built for BAOSP.
+Thank you for contributing to baosp-tts, the SVOX Pico TTS engine built for BAOSP.
 This guide is written to work well with screen readers and keyboard-only navigation.
 Every step is numbered and linear — no visual layout is assumed.
 
@@ -60,10 +60,10 @@ You need:
 
 ## About this project
 
-aotts wraps the SVOX Pico TTS library (written in C) as an Android TTS engine.
-The project has two main parts:
+baosp-tts wraps the SVOX Pico TTS library (written in C) as an Android TTS engine.
+The project has three main parts:
 
-- `src/main/java/` — Kotlin/Java wrapper that registers as an Android TTS engine
+- `src/main/java/` — Java wrapper that registers as an Android TTS engine
 - `src/main/cpp/` — C code for SVOX Pico (downloaded during build, not committed)
 - `src/main/assets/lang/` — Language data files (also downloaded during build)
 
@@ -76,10 +76,10 @@ For local builds you need to download them yourself — see Step 4 below.
 
 Forking makes a personal copy of the code under your own GitHub account.
 
-1. Open github.com/tech-master33/aotts
+1. Open github.com/tech-master33/baosp-tts
 2. Activate the Fork button near the top of the page
 3. On the next screen, activate Create fork
-4. GitHub takes you to your copy at github.com/YOUR-USERNAME/aotts
+4. GitHub takes you to your copy at github.com/YOUR-USERNAME/baosp-tts
 
 ---
 
@@ -89,9 +89,9 @@ Open a terminal and run these commands one at a time.
 Replace YOUR-USERNAME with your actual GitHub username.
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/aotts.git
-cd aotts
-git remote add upstream https://github.com/tech-master33/aotts.git
+git clone https://github.com/YOUR-USERNAME/baosp-tts.git
+cd baosp-tts
+git remote add upstream https://github.com/tech-master33/baosp-tts.git
 ```
 
 Running `git remote -v` should now show both `origin` (your fork) and `upstream` (the main repo).
@@ -172,29 +172,29 @@ Every change must follow these rules:
 
 ```bash
 chmod +x gradlew
-./gradlew assembleDebug
+./gradlew assembleDebug -Pandroid.ndkVersion=23.1.7779620
 ```
 
 The APK will be at:
 
 ```
-build/outputs/apk/debug/aotts-debug.apk
+build/outputs/apk/debug/
 ```
 
 To install it on a connected Android device:
 
 ```bash
-adb install build/outputs/apk/debug/aotts-debug.apk
+adb install build/outputs/apk/debug/*.apk
 ```
 
-After installing, go to Settings → Accessibility → Text-to-speech output and select aotts as the engine.
+After installing, go to Settings → Language & input → Text-to-speech output and select BAOSP TTS as the engine.
 
 ### Manual testing checklist
 
 Go through each item before submitting your pull request:
 
 - The app builds without errors or warnings (including the NDK build)
-- aotts appears in the TTS engine list in Android Settings
+- baosp-tts appears in the TTS engine list in Android Settings
 - All six languages (English US, English GB, German, Spanish, French, Italian) produce speech
 - Speech rate and pitch controls in Settings take effect immediately
 - The engine does not crash or produce silence on long strings
@@ -235,7 +235,7 @@ git push origin your-branch-name
 
 Then:
 
-1. Open github.com/YOUR-USERNAME/aotts
+1. Open github.com/YOUR-USERNAME/baosp-tts
 2. GitHub shows a bar saying your branch was recently pushed
 3. Activate Compare and pull request
 4. Fill in the title: one sentence describing the change
@@ -248,7 +248,7 @@ Then:
 
 You do not need to know how to code to do this. It is one of the most valuable contributions.
 
-1. Open github.com/tech-master33/aotts/issues
+1. Open github.com/tech-master33/baosp-tts/issues
 2. Activate New issue
 3. Choose Bug report or Feature request
 4. Fill in the title with one short sentence describing the problem or request
@@ -277,9 +277,9 @@ If you have not heard back after a week, add a comment to the pull request to as
 
 ## Community and questions
 
-- Discussions: github.com/tech-master33/aotts/discussions
-- Issues: github.com/tech-master33/aotts/issues
-- Screen reader: github.com/tech-master33/andrdscren
+- Discussions: github.com/tech-master33/baosp-tts/discussions
+- Issues: github.com/tech-master33/baosp-tts/issues
+- Screen reader: github.com/tech-master33/baosp-screenreader
 - Launcher: github.com/tech-master33/aoler
 - BAOSP main project: github.com/tech-master33/baosp
 
