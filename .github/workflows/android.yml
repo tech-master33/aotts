@@ -1,4 +1,4 @@
-name: Android CI — aotts
+name: Android CI — baosp-tts
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    name: Build AOTTS APK
+    name: Build baosp-tts APK
     runs-on: ubuntu-22.04
 
     steps:
@@ -104,7 +104,7 @@ jobs:
       - name: Upload debug APK as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: aotts-debug
+          name: baosp-tts-debug
           path: build/outputs/apk/debug/
           retention-days: 30
           if-no-files-found: error
@@ -112,20 +112,17 @@ jobs:
       - name: Upload release APK as artifact (if built)
         uses: actions/upload-artifact@v4
         with:
-          name: aotts-release
+          name: baosp-tts-release
           path: build/outputs/apk/release/
           retention-days: 30
           if-no-files-found: ignore
 
-      # ── Auto-release on every successful push to main ──────────────────
-      # Creates a GitHub Release tagged with the build number + commit SHA.
-      # The APK is attached directly — always one link to the latest build.
       - name: Create GitHub Release with APK
         if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "build-${{ github.run_number }}-${{ github.sha }}"
-          name: "aotts build ${{ github.run_number }} — ${{ github.sha }}"
+          name: "baosp-tts build ${{ github.run_number }}"
           body: |
             Automated build from commit ${{ github.sha }}
 
@@ -139,7 +136,7 @@ jobs:
             2. Transfer it to your Android device
             3. Install it (allow unknown sources if prompted)
             4. Go to **Settings → Language & input → Text-to-speech output**
-            5. Select **AOTTS Pico** as your engine
+            5. Select **BAOSP TTS** as your engine
           prerelease: true
           files: |
             build/outputs/apk/debug/*.apk
